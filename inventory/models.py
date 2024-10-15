@@ -8,9 +8,9 @@ from base.models import Student
 class Book(models.Model):
     title = models.CharField(max_length=100)
     code = models.CharField(max_length=20)
-    cover_image = models.ImageField()
+    cover_image = models.ImageField(blank=True, null=True)
     author= models.CharField(max_length=200)
-    date_published = models.DateField()
+    date_published = models.DateField(auto_now_add=True)
     quantity = models.IntegerField()
     
     def __str__(self):
