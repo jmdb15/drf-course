@@ -6,7 +6,7 @@ from base.models import Student
 
 
 class Book(models.Model):
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=100, unique=True)
     code = models.CharField(max_length=20)
     cover_image = models.ImageField(blank=True, null=True)
     author= models.CharField(max_length=200)
@@ -30,5 +30,7 @@ class BorrowLog(models.Model):
     date_borrowed = models.DateTimeField(blank=True, null=True)
     date_returned = models.DateTimeField(blank=True, null=True)
     due_date = models.DateField()
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+
+    
     

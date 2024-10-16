@@ -1,14 +1,24 @@
 import requests, os
+
 from dotenv import load_dotenv
 from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
+from rest_framework import generics, status
 from django.conf import settings
+from rest_framework.permissions import IsAuthenticated
+
+from .models import Student
+from inventory.models import Book, BorrowLog
+from inventory.serializer import BookSerializer
+from inventory.pagination import Paginate10
+from .serializers import StudentSerializer
 
 # Create your views here.
 
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def login(request):
     load_dotenv()
     
@@ -43,3 +53,22 @@ def login(request):
     except requests.exceptions.RequestException as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+
+class RegisterStudentView(generics.CreateAPIView):
+    # queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+    
+
+# WEEK 3
+class DashboardView(generics.ListAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    pagination_class = Paginate10
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request, *args, **kwargs):
+        logs = BorrowLog.objects.filter(student__id=request.user.id)
+        referenced_books = [log.book for log in logs] 
+        unique_books = list(set(referenced_books))
+        serializer = BookSerializer(unique_books, many=True)
+        return Response(serializer.data)

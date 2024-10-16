@@ -22,5 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('o/', include(oauth2_url)),
     path('api/', include('base.urls')),
-    path('api/books/', include('inventory.urls')),
+    path('api/inventory/', include('inventory.urls')),
 ]
