@@ -1,8 +1,9 @@
 from rest_framework import permissions
+from base.models import Student
 
 class IsLibrarian(permissions.BasePermission):
   def has_permission(self, request, view):
-    return True
+    return request.user.groups.filter(name='Librarian').exists()
   
 class IsOwner(permissions.BasePermission):
   def has_object_permission(self, request, view, obj):

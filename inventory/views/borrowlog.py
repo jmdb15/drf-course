@@ -4,7 +4,7 @@ from rest_framework import response, status
 
 from ..permissions import IsLibrarian, IsOwner
 from ..models import BorrowLog, Book
-from ..serializer import BorrowLogSerializer
+from ..serializers import BorrowLogSerializer
 from ..pagination import Paginate10
 
 # Create your views here.
@@ -41,7 +41,7 @@ class BorrowLogCreateView(generics.CreateAPIView):
 class BorrowLogUpdateView(generics.UpdateAPIView):
    queryset = BorrowLog.objects.all()
    serializer_class = BorrowLogSerializer
-   permission_classes = [IsOwner]
+   permission_classes = []
 
 
 class BorrowLogDeleteView(generics.DestroyAPIView):
